@@ -1,0 +1,351 @@
+<?php
+// Add an nonce field so we can check for it later.
+wp_nonce_field(CMBD_SLUG_NAME . '-custom-fields', CMBD_SLUG_NAME . '-custom-fields-nonce');
+$placeholder = array();
+$placeholder = apply_filters('cmbd_placecholders', $placeholder);
+
+$image = CMBusinessDirectoryBackend::getBusinessGalleryImageIds($post->ID);
+if( empty($image) )
+{
+    $default_image = CMBD_Settings::getOption(CMBD_Settings::OPTION_BUSINESS_DEFAULT_IMAGE);
+    $default_image = empty($default_image) ? CMBD_PLUGIN_URL . 'frontend/assets/img/black.jpg' : $default_image;
+    $image['html'] = $default_image;
+    $image['width'] = 400;
+    $image['height'] = 400;
+    $image['id'] = 'default';
+}
+$img_id = CMBusinessDirectory::meta($post->ID, 'cmbd_business_gallery_id');
+$image_warning = CMBD_Settings::getOptionConfig(CMBD_Settings::OPTION_BUSINESS_IMAGE_WARNING);
+$enambe_promoted = CMBusinessDirectory::meta($post->ID, 'cmbd_promoted');
+?>
+
+<div class="cmbd_metabox_settings_container">
+    <div class="cmbd_metabox_container_title">
+        General
+    </div>
+    <div class="cmbd_metabox_image" id="cmbd_business_images_container">
+
+        <a href="#" id="cmbd_add_business_image" >Add Logo</a>
+        <span class="cmbd_field_help_logo" title="(must be a square ex: 300px:300px)
+              Non square logo will be resized.
+              Max size is 500px by 500px."> </span>
+
+        <input type="hidden" id="cmbd_business_gallery_id" name="cmbd_business_gallery_id" value="<?php echo esc_attr($img_id); ?>" />
+        <?php
+        if( $image['width'] > 500 && $image['height'] > 500 && $image_warning )
+        {
+            echo '<span><strong>Your image size is biger then 500x500</strong></span>';
+        }
+        ?>
+        <ul class="cmbd_business_images" id="cmbd_business_images_list">
+            <?php
+            if( !empty($image['html']) )
+            {
+                $img_html = $image['html'];
+                $img_id = $image['id'];
+            }
+            else
+            {
+                $img_html = '';
+                $img_id = '';
+            }
+            ?>
+
+            <li class="image" data-attachment_id="<?php echo esc_attr($img_id); ?>"><img class="default-image" id="cmbd_image" alt="No image was selected" src="<?php echo esc_attr($img_html); ?> " width="320" height="320">
+                <ul class="cmpc_actions">
+                    <li><a href="#" class="delete" title="<?php _e('Delete') ?>"><strong>[x] Remove Logo</strong></a></li>
+                </ul>
+            </li>
+
+        </ul>
+
+    </div>
+
+    <p>
+        <label class="cmbd_metabox_label" for="business_pitch">
+            <span><strong>
+                    <?php
+                    _e('Business pitch', CMBD_SLUG_NAME);
+                    ?>
+                </strong></span>
+        </label>
+    </p>
+    <div class="clear"></div>
+
+    <textarea  class="cmbd_metabox_textarea" type="text" name="cmbd_business_pitch" id="business_pitch" placeholder="<?php echo esc_attr(empty($placeholder['form_business_pitch_placeholder']) ? '' : $placeholder['form_business_pitch_placeholder']); ?>"><?php echo esc_html(CMBusinessDirectory::meta($post->ID, 'cmbd_business_pitch')); ?></textarea>
+
+    <p>
+        <label for="promoted" class="cmbd_metabox_label_ad">
+            <span><strong>
+                    <?php
+                    _e('Is this product promoted?', CMBD_SLUG_NAME);
+                    ?>
+                </strong></span>
+            <span class="cmbd_field_help" title="If checked, the product will be on the top of search results"> </span>
+        </label>
+        <input type="hidden" name="cmbd_promoted" value="2" >
+
+        <input type="checkbox" name="cmbd_promoted" id="promoted" class="cm_checkbox" value="1" <?php checked($enambe_promoted, 1, 1) ?>>
+        <br/>
+    </p>
+
+</div>
+<br />
+<div class="cmbd_metabox_settings_container">
+    <div class="cmbd_metabox_container_title">
+        Business Address
+    </div>
+    <?php
+    $virtual_address = CMBusinessDirectory::meta($post->ID, 'cmbd_virtual_address');
+    ?>
+    <div class="clear"></div>
+    <p>
+        <label for="virtual_address" class="cmbd_metabox_label">
+            <span><strong><?php
+                    _e('Virtual address', CMBD_SLUG_NAME);
+                    ?></strong></span>
+            <span class="cmbd_field_help" title="If checked all address fieds will be not displayed"> </span>
+        </label>
+        <input type="hidden" name="cmbd_virtual_address" value="0" >
+        <input type="checkbox" name="cmbd_virtual_address" id="virtual_address" class="cm_checkbox" value="1" <?php checked($virtual_address, '1', 1) ?>>
+
+    </p>
+    <div class="clear"></div>
+    <?php
+    if( $virtual_address !== '1' )
+    {
+        $title = $post->title;
+        $address = CMBusinessDirectory::meta($post->ID, 'cmbd_address');
+        $address = empty($address) ? '' : ' ' . $address;
+        $cityTown = CMBusinessDirectory::meta($post->ID, 'cmbd_cityTown');
+        $cityTown = empty($cityTown) ? '' : ' ' . $cityTown;
+        $postalcode = CMBusinessDirectory::meta($post->ID, 'cmbd_postalcode');
+        $postalcode = empty($postalcode) ? '' : ' ' . $postalcode;
+        $country = CMBusinessDirectory::meta($post->ID, 'cmbd_country');
+        $country = empty($country) ? '' : ' ' . $country;
+
+        $location = $address . $cityTown . $postalcode . $country;
+        wp_enqueue_script('cmbd-functions');
+        ?>
+        <div class="clear"></div>
+        <p>
+            <label class="cmbd_metabox_label" for="address">
+                <span><strong>
+                        <?php ?><?php _e('Address', CMBD_SLUG_NAME); ?>
+                    </strong></span>
+            </label>
+            <input class="large-text ui-autocomplete-input cm_input" type="text" name="cmbd_address" id="address" placeholder="<?php echo esc_attr(empty($placeholder['form_address_placeholder']) ? '' : $placeholder['form_address_placeholder']); ?>" value="<?php echo esc_attr(CMBusinessDirectory::meta($post->ID, 'cmbd_address')); ?>">
+
+        </p>
+        <div class="clear"></div>
+        <p>
+            <label class="cmbd_metabox_label" for="address">
+                <span><strong>
+                        <?php ?><?php _e('City/Town', CMBD_SLUG_NAME); ?>
+                    </strong></span>
+            </label>
+            <input class="large-text ui-autocomplete-input cm_input" type="text" name="cmbd_cityTown" id="cityTown" placeholder="<?php echo esc_attr(empty($placeholder['form_cityTown_placeholder']) ? '' : $placeholder['form_cityTown_placeholder']); ?>" value="<?php echo esc_attr(CMBusinessDirectory::meta($post->ID, 'cmbd_cityTown')); ?>">
+
+        </p>
+        <div class="clear"></div>
+        <p>
+            <label class="cmbd_metabox_label" for="region">
+                <span><strong>
+                        <?php ?><?php _e('Region', CMBD_SLUG_NAME); ?>
+                    </strong></span>
+            </label>
+            <input class="large-text ui-autocomplete-input cm_input" type="text" name="cmbd_region" id="region" placeholder="<?php echo esc_attr(empty($placeholder['form_region_placeholder']) ? '' : $placeholder['form_region_placeholder']); ?>" value="<?php echo esc_attr(CMBusinessDirectory::meta($post->ID, 'cmbd_region')); ?>">
+        </p>
+        <div class="clear"></div>
+        <p>
+            <label class="cmbd_metabox_label" for="stateCounty">
+                <span><strong>
+                        <?php ?><?php _e('State/County', CMBD_SLUG_NAME); ?>
+                    </strong></span>
+            </label>
+            <input class="large-text ui-autocomplete-input cm_input" type="text" name="cmbd_stateCounty" id="address" placeholder="<?php echo esc_attr(empty($placeholder['form_stateCounty_placeholder']) ? '' : $placeholder['form_stateCounty_placeholder']); ?>" value="<?php echo esc_attr(CMBusinessDirectory::meta($post->ID, 'cmbd_stateCounty')); ?>">
+
+        </p>
+        <div class="clear"></div>
+
+        <p>
+            <label class="cmbd_metabox_label" for="country">
+                <span><strong>
+                        <?php
+                        _e('Country', CMBD_SLUG_NAME);
+                        $countries = array("Afghanistan", "Albania", "Algeria", "American Samoa", "Andorra", "Angola", "Anguilla", "Antarctica", "Antigua and Barbuda", "Argentina", "Armenia", "Aruba", "Australia", "Austria", "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bermuda", "Bhutan", "Bolivia", "Bosnia and Herzegowina", "Botswana", "Bouvet Island", "Brazil", "British Indian Ocean Territory", "Brunei Darussalam", "Bulgaria", "Burkina Faso", "Burundi", "Cambodia", "Cameroon", "Canada", "Cape Verde", "Cayman Islands", "Central African Republic", "Chad", "Chile", "China", "Christmas Island", "Cocos (Keeling) Islands", "Colombia", "Comoros", "Congo", "Congo, the Democratic Republic of the", "Cook Islands", "Costa Rica", "Cote d'Ivoire", "Croatia (Hrvatska)", "Cuba", "Cyprus", "Czech Republic", "Denmark", "Djibouti", "Dominica", "Dominican Republic", "East Timor", "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea", "Eritrea", "Estonia", "Ethiopia", "Falkland Islands (Malvinas)", "Faroe Islands", "Fiji", "Finland", "France", "France Metropolitan", "French Guiana", "French Polynesia", "French Southern Territories", "Gabon", "Gambia", "Georgia", "Germany", "Ghana", "Gibraltar", "Greece", "Greenland", "Grenada", "Guadeloupe", "Guam", "Guatemala", "Guinea", "Guinea-Bissau", "Guyana", "Haiti", "Heard and Mc Donald Islands", "Holy See (Vatican City State)", "Honduras", "Hong Kong", "Hungary", "Iceland", "India", "Indonesia", "Iran (Islamic Republic of)", "Iraq", "Ireland", "Israel", "Italy", "Jamaica", "Japan", "Jordan", "Kazakhstan", "Kenya", "Kiribati", "Korea, Democratic People's Republic of", "Korea, Republic of", "Kuwait", "Kyrgyzstan", "Lao, People's Democratic Republic", "Latvia", "Lebanon", "Lesotho", "Liberia", "Libyan Arab Jamahiriya", "Liechtenstein", "Lithuania", "Luxembourg", "Macau", "Macedonia, The Former Yugoslav Republic of", "Madagascar", "Malawi", "Malaysia", "Maldives", "Mali", "Malta", "Marshall Islands", "Martinique", "Mauritania", "Mauritius", "Mayotte", "Mexico", "Micronesia, Federated States of", "Moldova, Republic of", "Monaco", "Mongolia", "Montserrat", "Morocco", "Mozambique", "Myanmar", "Namibia", "Nauru", "Nepal", "Netherlands", "Netherlands Antilles", "New Caledonia", "New Zealand", "Nicaragua", "Niger", "Nigeria", "Niue", "Norfolk Island", "Northern Mariana Islands", "Norway", "Oman", "Pakistan", "Palau", "Panama", "Papua New Guinea", "Paraguay", "Peru", "Philippines", "Pitcairn", "Poland", "Portugal", "Puerto Rico", "Qatar", "Reunion", "Romania", "Russian Federation", "Rwanda", "Saint Kitts and Nevis", "Saint Lucia", "Saint Vincent and the Grenadines", "Samoa", "San Marino", "Sao Tome and Principe", "Saudi Arabia", "Senegal", "Seychelles", "Sierra Leone", "Singapore", "Slovakia (Slovak Republic)", "Slovenia", "Solomon Islands", "Somalia", "South Africa", "South Georgia and the South Sandwich Islands", "Spain", "Sri Lanka", "St. Helena", "St. Pierre and Miquelon", "Sudan", "Suriname", "Svalbard and Jan Mayen Islands", "Swaziland", "Sweden", "Switzerland", "Syrian Arab Republic", "Taiwan, Province of China", "Tajikistan", "Tanzania, United Republic of", "Thailand", "Togo", "Tokelau", "Tonga", "Trinidad and Tobago", "Tunisia", "Turkey", "Turkmenistan", "Turks and Caicos Islands", "Tuvalu", "Uganda", "Ukraine", "United Arab Emirates", "United Kingdom", "United States", "United States Minor Outlying Islands", "Uruguay", "Uzbekistan", "Vanuatu", "Venezuela", "Vietnam", "Virgin Islands (British)", "Virgin Islands (U.S.)", "Wallis and Futuna Islands", "Western Sahara", "Yemen", "Yugoslavia", "Zambia", "Zimbabwe");
+                        $current = CMBusinessDirectory::meta($post->ID, 'cmbd_country');
+                        if( empty($current) )
+                        {
+
+                            $current = CMBD_Settings::getOption(CMBD_Settings::OPTION_BUSINESS_DEFAULT_COUNTRY);
+                            $current = $countries[$current];
+                        }
+                        ?>
+                    </strong></span>
+            </label>
+            <select class="large-text ui-autocomplete-input cm_input" type="text" name="cmbd_country" id="country">
+                <?php
+                foreach($countries as $country)
+                {
+                    echo '<option value="' . esc_attr($country) . '" ' . selected($current, $country, 0) . '>' . $country . '</option>';
+                }
+                ?>
+            </select>
+        </p>
+        <div class="clear"></div>
+        <p>
+            <label class="cmbd_metabox_label" for="postalcode">
+                <span><strong>
+                        <?php ?><?php _e('Postalcode', CMBD_SLUG_NAME); ?>
+                    </strong></span>
+            </label>
+            <input class="large-text ui-autocomplete-input cm_input" type="text" name="cmbd_postalcode" id="address" placeholder="<?php echo esc_attr(empty($placeholder['form_postalcode_placeholder']) ? '' : $placeholder['form_postalcode_placeholder']); ?>" value="<?php echo esc_attr(CMBusinessDirectory::meta($post->ID, 'cmbd_postalcode')); ?>">
+
+        </p>
+        <div class="clear"></div>
+
+        <p>
+            <label for="add_address_field" class="cmbd_metabox_label">
+                <span><strong>
+                        <?php
+                        _e('Show address', CMBD_SLUG_NAME);
+                        ?>
+                    </strong></span>
+                <span class="cmbd_field_help" title="If not checked the address will not appear on business page"> </span>
+            </label>
+            <input type="hidden" name="cmbd_add_address_field" value="0" >
+            <?php
+            $enable_address = CMBusinessDirectory::meta($post->ID, 'cmbd_add_address_field');
+            if( $enable_address === '0' )
+            {
+                $checked = 0;
+            }
+            else
+            {
+                $checked = 1;
+            }
+            ?>
+            <input type="checkbox" name="cmbd_add_address_field" id="add_address_field" class="cm_checkbox" value="1" <?php checked($checked, 1, 1); ?>>
+            <br/>
+        </p>
+        <?php
+    }
+    ?>
+    <div class="clear"></div>
+</div>
+<div class="clear"></div>
+<div class="cmbd_metabox_settings_container">
+    <div class="cmbd_metabox_container_title">
+        Business Info Box
+    </div>
+    <p>
+        <label class="cmbd_metabox_label" for="year_founded">
+            <span><strong>
+                    <?php
+                    _e('Year founded', CMBD_SLUG_NAME);
+                    ?>
+                </strong></span>
+        </label>
+
+        <select name="cmbd_year_founded" id="year_founded" class="cm_imput_short">
+            <?php
+            echo '<option value="Not indicated" ' . selected($selected, 'Not indicated', 0) . ' >Not indicated</option>';
+
+            $default_seting = CMBD_Settings::getOption(CMBD_Settings::OPTION_BUSINESS_DEFAULT_YEAR);
+            $years = array('Not indicated', 1950, 1951, 1952, 1953, 1954, 1955, 1956, 1957, 1958, 1959
+                , 1960, 1961, 1962, 1963, 1964, 1965, 1966, 1967, 1968, 1969
+                , 1970, 1971, 1972, 1973, 1974, 1975, 1976, 1977, 1978, 1979
+                , 1980, 1981, 1982, 1983, 1984, 1985, 1986, 1987, 1988, 1989
+                , 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999
+                , 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
+                , 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017);
+            $default_seting = $years[$default_seting];
+            $i = 1950;
+            $max = intval(date('Y'),10) + 2;
+            $selected = CMBusinessDirectory::meta($post->ID, 'cmbd_year_founded');
+            $selected = ($selected !== 0) ? $default_seting : $selected;
+            for($i; $i <= $max; $i++)
+            {
+                echo '<option value="' . esc_attr($i) . '" ' . selected($selected, $i, 0) . ' >' . $i . '</option>';
+            }
+            ?>
+        </select>
+    </p>
+    <div class="clear"></div>
+
+    <p>
+        <label for="cmbd_phone" class="cmbd_metabox_label">
+            <span><strong>
+                    <?php
+                    _e('Phone', CMBD_SLUG_NAME);
+                    ?>
+                </strong></span>
+        </label>
+        <?php
+        if( empty($placeholder['form_phone_placeholder']) )
+        {
+            ?>
+            <input class="large-text ui-autocomplete-input cm_input" type="text" name="cmbd_phone" id="cmbd_phone" placeholder="(XXX)-XXX-XXXX or +1-(XXX)-XXX-XXXX" value="<?php echo esc_attr(CMBusinessDirectory::meta($post->ID, 'cmbd_phone')); ?>">
+            <?php
+        }
+        else
+        {
+            ?>
+            <input class="large-text ui-autocomplete-input cm_input" type="text" name="cmbd_phone" id="cmbd_phone" placeholder="<?php echo esc_attr($placeholder['form_phone_placeholder']); ?>" value="<?php echo esc_attr(CMBusinessDirectory::meta($post->ID, 'cmbd_phone')); ?>">
+        <?php }
+        ?>
+    </p>
+    <div class="clear"></div>
+
+    <p>
+        <label for="bemail" class="cmbd_metabox_label">
+            <span><strong>
+                    <?php
+                    _e('Email', CMBD_SLUG_NAME);
+                    ?>
+                </strong></span>
+        </label>
+        <?php
+        if( empty($placeholder['form_bemail_contact_placeholder']) )
+        {
+            ?>
+            <input class="large-text ui-autocomplete-input cm_input" type="text" placeholder="email@company-domain.com" name="cmbd_bemail" id="bemail" value="<?php echo esc_attr(CMBusinessDirectory::meta($post->ID, 'cmbd_bemail')); ?>">
+            <?php
+        }
+        else
+        {
+            ?>
+            <input class="large-text ui-autocomplete-input cm_input" type="text" placeholder="<?php echo esc_attr($placeholder['form_bemail_contact_placeholder']); ?>" name="cmbd_bemail" id="bemail" value="<?php echo esc_attr(CMBusinessDirectory::meta($post->ID, 'cmbd_bemail')); ?>">
+        <?php }
+        ?>
+    </p>
+    <div class="clear"></div>
+    <p>
+        <label for="web_url" class="cmbd_metabox_label">
+            <span><strong>
+                    <?php
+                    _e('Web Url', CMBD_SLUG_NAME);
+                    ?>
+                </strong></span>
+        </label>
+        <?php
+        if( empty($placeholder['form_web_url_placeholder']) )
+        {
+            ?>
+            <input class="large-text ui-autocomplete-input cm_input" placeholder="https://www.your_company_site.com" type="text" name="cmbd_web_url" id="web_url" value="<?php echo esc_attr(CMBusinessDirectory::meta($post->ID, 'cmbd_web_url')); ?>">
+            <?php
+        }
+        else
+        {
+            ?>
+            <input class="large-text ui-autocomplete-input cm_input" placeholder="<?php echo esc_attr($placeholder['form_web_url_placeholder']); ?>" type="text" name="cmbd_web_url" id="web_url" value="<?php echo esc_attr(CMBusinessDirectory::meta($post->ID, 'cmbd_web_url')); ?>">
+        <?php }
+        ?>
+    </p>
+
+   
+    <div class="clear"></div>
+</div>
+<div style="height: 30px;clear:both"></div>
+
