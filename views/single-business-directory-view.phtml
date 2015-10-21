@@ -1,0 +1,47 @@
+<?php
+$postId = $business->ID;
+$mainDivClass = 'cmbd-module-actions';
+
+$height = CMBD_Settings::getOption(CMBD_Settings::OPTION_BUSINESS_HEIGHT);
+if (!empty($height) && is_numeric($height)) {
+    $height .= 'px';
+}
+$customHeight = !empty($height) ? 'height: ' . $height : null;
+$customStyleArr[] = $customHeight;
+
+
+$width = CMBD_Settings::getOption(CMBD_Settings::OPTION_BUSINESS_WIDTH);
+if (!empty($width) && is_numeric($width)) {
+    $width .= 'px';
+}
+$customWidth = !empty($width) ? 'width: ' . $width : null;
+$customStyleArr[] = $customWidth;
+$setting = CMBD_Settings::getOption(CMBD_Settings::OPTION_BUTTONS_TARGET_BLANK);
+$blank = empty($setting) ? '' : 'target="_blank" ';
+$customStyle = implode(';', array_filter($customStyleArr));
+$image = CMBusinessDirectoryBusinessPage::getBusinessGallery($business->ID);
+
+
+$url = empty($image[0]['cmbd_image'][0]) ? CMBD_PLUGIN_URL . 'frontend/assets/img/black.jpg' : $image[0]['cmbd_image'][0];
+$title = $business->post_title;
+
+
+$view = (!empty($atts['view']) && in_array($atts['view'], array('image-tiles', 'cube-view', 'directory-view'))) ? $atts['view'] : 'image-tiles';
+?> 
+
+<div class="product-related cmbd-directory" style="<?php echo esc_attr($customStyle); ?>">
+    <a href="<?php echo esc_attr(post_permalink($business->ID)); ?>" <?php echo $blank ?>>
+        <div class="cmbd_inside">
+            <?php if (!empty($url)) { ?>
+                <img class="img_center" alt="<?php echo esc_attr($title); ?>" src="<?php echo esc_attr($url); ?>"  />
+            <?php } ?>
+            <h5 class="connected-title text-center cmbd-directory-title"><?php
+                echo $title;
+                // 
+                ?>
+            </h5>
+        </div>
+    </a>
+    <?php echo CMBusinessDirectoryFrontend::outputEditlink($business, $atts); ?>
+</div>
+
