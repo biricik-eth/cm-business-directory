@@ -1,0 +1,227 @@
+.text-center {
+    text-align: center;
+    margin: 0;}
+.cmbd_dashicons {
+    margin-right: 5px;
+}
+.cmbd_product_image{
+    margin-bottom: 30px;
+}
+.cmbd_related_business_image{
+    height: 150px;
+}
+.cmbd_add_link_ico{
+    margin-right: 5px;
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    font-size: 20px;
+    line-height: 1;
+    font-family: dashicons;
+    text-decoration: inherit;
+    font-weight: 400;
+    font-style: normal;
+    vertical-align: top;
+    text-align: center;
+    -webkit-transition: color .1s ease-in 0;
+    transition: color .1s ease-in 0;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.cmbd-business-pitch-label{
+    font-weight: bold;
+    font-size: 1.1em;
+    margin-bottom: 20px;
+}
+
+.clearfix:after {
+    content: " ";
+    /* Older browser do not support empty content */
+    visibility: hidden;
+    display: block;
+    height: 0;
+    clear: both; }
+
+body {
+    font-family: 'Varela Round', sans-serif; }
+
+.list-unstyled {
+    padding: 0;
+    margin: 0 0 15px; }
+.list-unstyled li {
+    list-style: none; }
+
+.list-inline li {
+    display: inline-block;
+    margin-right: 15px; }
+
+.img-responsive {
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 30px;
+    height: auto;
+    display: block; }
+
+.product-container {
+    width: 1024px;
+    max-width: 100%;
+    margin: 0 auto;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-bottom: 30px;
+    box-sizing: border-box; }
+
+.product-container .cmbd_content_block {
+    margin-top: 30px;
+}
+.product-title {
+    font-size: 50px;
+    font-weight: normal;
+    margin-bottom: 15px; }
+
+.product-info-blocks li {
+    padding: 5px;
+    border: 1px solid #d9d9d9;
+    color: gray;
+    border-radius: 3px;
+    font-size: 13px; }
+.product-info-blocks li i {
+    margin-right: 5px; }
+
+
+.product-info {
+    margin-top: 0px;
+}
+
+.product-aside {
+    width: 30%;
+    float: left;
+    margin-top: 0px;
+}
+
+.cmbd-cat {
+    background:darkgrey;
+    color:white !important;
+    border: 1px solid;
+    border-radius: 25px;
+    padding:6px;
+    font-weight:700;
+}
+
+.cmbd-tag {
+    background:darkgrey;
+    color:white !important;
+    border: 1px solid;
+    border-radius: 25px;
+    padding:6px;
+    font-weight:700;
+}
+
+.cmbd-business-pitch-label {
+    margin-bottom: 20px;
+}
+
+.product-info-text {
+    width: 70%;
+    float: right;
+    /*    word-break: break-all;*/
+    padding: 0 0 0 50px;
+    box-sizing: border-box;
+    text-align: justify;
+    overflow: hidden;
+}
+.product-info-text h2 {
+    font-weight: normal;
+    margin-top: 0; }
+.product-info-text p {
+    font-size: 18px; }
+
+.product-widget {
+    background: #2e3641;
+    color: #fff;
+    padding: 0px;
+    //margin-top: 30px;
+    margin-top: 0px;
+}
+.product-widget h3 {
+    margin-top: 0; }
+div.product-widget ul li:first-child{
+    padding-top: 25px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+div.product-widget ul li:last-child{
+    padding-bottom: 25px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+div.product-widget ul li{
+    margin: 0;
+    padding-bottom: 5px;
+    padding-top: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.product-widget li {
+    margin-bottom: 0px; }
+.product-widget a {
+    color: #fff;
+    text-decoration: none; }
+.product-widget a i {
+    margin-right: 5px; }
+
+div.cmbd_over_related{
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+div.cmbd_under_related{
+    margin-top: 30px;
+}
+.product-related {
+    //max-width: 150px;
+    clear: none;
+    vertical-align: top;
+    width: 150px;
+    padding: 0 0 5px;
+    border-radius: 3px;
+    border: 1px solid #d9d9d9;
+    display: inline-block;
+    margin: 0 15px 15px ;
+    position: relative;}
+.product-related img {
+    max-width:100%;
+    max-height:100%;
+    margin: 2px auto;
+    display:block;
+}
+.product-related a {
+    color: gray;
+    text-decoration: none; }
+.product-related h5 {
+    position:absolute;
+    text-align: center;
+    width: 100%;
+    bottom: 5px;
+    z-index:2;
+    margin: 5px 0 0; }
+.product-related:hover {
+    background: #f4f4f4; }
+
+@media screen and (max-width: 767px) {
+    .product-aside {
+        float: right;
+        width: 100%; }
+
+    .product-info-text {
+        width: 100%;
+        padding: 0;
+        float: left;
+        margin-bottom: 15px; } }
+@media screen and (max-width: 410px) {
+    .product-related {
+        max-width: 130px;
+        margin: 0 0 15px 0; } }
