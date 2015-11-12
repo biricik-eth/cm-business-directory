@@ -1,0 +1,146 @@
+@CHARSET "UTF-8";
+li.image {
+
+    float: left;
+    border-radius: 2px;
+    position: relative;
+    padding: 2px;
+    margin: 2px;
+    cursor: move;
+}
+
+ul.business_images {
+    display: table;
+}
+.cmbd_field_help ,.cmbd_field_help_logo{
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    background-image: url('images/help.png');
+    margin-right: 5px;
+    cursor: pointer;
+    float: right;
+}
+#cmbd_add_business_image{
+    float: left;
+}
+.cmbd_field_help_logo{
+    float: left;
+    margin: 2px 5px;
+}
+.cmbd_field_help:hover, .cmbd_field_help_logo:hover{
+    background-image: url('images/help_hover.png');
+}
+#business_images_container {
+    padding-left: 0px;
+    margin-left: 0px;
+    width: 65%;
+}
+
+#business_images_container img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+ul.cmbd_actions {
+    position: absolute;
+    background-color: #fff;
+    opacity: 0.5;
+    top: 2px;
+    width: 74px;
+    height: 20px;
+    text-align: right;
+    padding: 3px;
+}
+
+ul.cmbd_actions a {
+    text-decoration: none;
+}
+.cmbd_add_business_image{
+
+}
+
+#cmbd_business_images_container{
+
+}
+.cmbd_metabox_textarea{
+    width: 435px;
+    height: 295px;
+    margin : 10px 10px 10px 10px ;
+}
+.cmbd_metabox_textarea_ad{
+    width: 435px;
+    height: 150px;
+    margin : 10px 10px 10px 10px ;
+}
+
+.cmbd_metabox_image{
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    margin : 0;
+}
+
+.cmbd_metabox_container_title{
+    padding:  5px 15px 5px 10px;
+    font-size: 2em;
+}
+.cmbd_metabox_settings_container{
+    margin: 0px 5px 5px 0px;
+    position: relative;
+    width: 100%;
+    border-radius: 5px;
+    border: 2px solid #000;
+    padding-bottom: 10px;
+}
+.cmbd_metabox_label{
+    width: 138px;//16%;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    margin-left: 5px;
+    height: auto;
+    float:left;
+}
+.cmbd_metabox_label_ad{
+    width: 200px;//16%;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    margin-left: 5px;
+    height: auto;
+    float:left;
+}
+.cm_desc {
+    width: 160px;
+    float:left;
+}
+.cm_input {
+    float: left;
+    width: 300px !important;
+    margin-top: -5px;
+}
+.cm_checkbox {
+    float: left;
+    margin-top: 5px !important;
+}
+.cm_textarea {
+    width: 500px !important;
+    height: 120px;
+}
+@media all and (max-width: 530px) {
+    .cm-input {
+        margin-top:5px;
+    }
+}
+
+.ui-tooltip {
+	padding: 8px;
+	position: absolute;
+	z-index: 9999;
+	max-width: 300px;
+	-webkit-box-shadow: 0 0 5px #aaa;
+	box-shadow: 0 0 5px #aaa;
+}
+body .ui-tooltip {
+	border-width: 2px;
+}

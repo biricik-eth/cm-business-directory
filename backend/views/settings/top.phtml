@@ -1,0 +1,100 @@
+<?php echo do_shortcode( '[cminds_free_registration id="cmbd"]' ); ?>
+
+<div class="cminds_settings_description">
+    <?php
+//    include plugin_dir_path(__FILE__) . '/upgrade.phtml';
+    ?>
+
+    <p>
+        <strong>Supported Shortcodes:</strong> <a href="javascript:void(0)" onclick="jQuery(this).parent().next().slideToggle()">Show/Hide</a>
+    </p>
+
+    <ul style="display:none;list-style-type:disc;margin-left:20px;">
+        <li>Shortcode Example - [cmbd_business showfilter="1"  row_business="3" cats="1" business_ids="1,3,5" ]<br><br>
+            <ul>
+                <li>* showfilter - whether to show the categories filter or not. Value should be 1 or 0</li>
+                <li>* row_business - number of the business in the row (<code>tiles</code> view only)</li>
+                <li>* page_business - number of the business on one page</li>
+                <li>* cats - the id of the catagory from which the business should be displayed</li>
+                <li>* business_ids - the IDs of the business you only want to show in directory. Value should be an ID, or comma separated IDs.</li>
+            </ul>
+        </li>
+
+        <li>Business Page shortcodes:<br /><br />
+            <ul>
+
+                <li>* cmbd_categories - whether to show categories and tags box</li>
+                <li>* cmbd_post_title - display post title</li>
+                <li>* cmbd_post_content - display post content</li>
+                <li>* cmbd_featured_image - display featured image</li>
+                <li>* cmbd_back_to_index_link - display back link</li>
+            </ul>
+        </li>
+    </ul>
+
+    <?php
+    $shortcodePageId = get_option(CMBusinessDirectory::SHORTCODE_PAGE_OPTION);
+    $shortcodePageEditLink = admin_url('post.php?post=' . $shortcodePageId . '&action=edit');
+    $shortcodePageLink = get_page_link($shortcodePageId);
+    ?>
+
+    <p>
+        <strong>Link to the CM Business Directory page:</strong>
+        <a href="<?php echo esc_attr($shortcodePageLink); ?>" target="_blank"><?php echo esc_html($shortcodePageLink); ?></a> (<a title="Edit the Business Directory Index Page" href="<?php echo esc_attr($shortcodePageEditLink); ?>">edit</a>)
+    </p>
+
+    <div>
+        <form method="post">
+            <input title="Warning! This option will completely erase all of the data stored by the CM Business Directory in the database: business, options etc. &lt;br/&gt; It will also remove the shortcode page. &lt;br/&gt; It cannot be reverted." onclick="return confirm('All database business of CM Business Directory (business,business, options etc.) will be erased. This cannot be reverted.')" type="submit" name="cmbd_pluginCleanup" value="Cleanup database" class="cmbd-button cmtt-cleanup-button" />
+        </form>
+        <form method="post">
+            <input title="Warning! This option will reset all options in CM Business Directory to default values." onclick="return confirm('All settings of CM Business Directory will be reseted. This cannot be reverted.')" type="submit" name="cmbd_pluginSetDefault" value="Set default settings" class="cmbd-button cmtt-cleanup-button" />
+        </form>
+    </div>
+
+    <div class="clear"></div>
+
+    <style type="text/css">
+        div.cminds_settings_description{
+            float: left;
+            max-width: 55%;
+            margin-bottom: 20px;
+        }
+        #cm-business-directory-settings-form table {border-spacing:0; width: 100%;}
+        #cm-business-directory-settings-form tr td, #cm-business-directory-settings-form tr th {padding:10px; border-bottom: solid 1px #f0f0f0; width: 30%;}
+        #cm-business-directory-settings-form tr th[colspan] {width: 100% !important;}
+        #cm-business-directory-settings-form table td input[type=text] {width: 90%; min-width: 100px; max-width: 300px;}
+        #cm-business-directory-settings-form table th {padding-left: 20px; font-weight: normal; text-align: right; vertical-align: top;}
+        #cm-business-directory-settings-form table td {vertical-align: top;}
+        #cm-business-directory-settings-form caption {color: #222; font: 600 1.3em verdana; margin: 1em 0; text-align: left;}
+        #cm-business-directory-settings-form tr:last-child td, #cm-business-directory-settings-form tr:last-child th {border-bottom: none}
+        textarea.cma-custom-css {min-width: 300px; max-width: 840px; width: 70%; height: 200px;}
+        #cm-business-directory-settings-form .tg-table-plain td, #cm-business-directory-settings-form .tg-table-plain th { border: 1px #555 solid; padding: 5px;border-collapse: collapse;text-align: center;vertical-align: middle; }
+        #cm-business-directory-settings-form .tab-content ul {list-style: circle; margin: 1em 0 1em 30px;}
+        #cm-business-directory-settings-form td ul, #cm-business-directory-settings-form td li {margin-top: 0 !important; padding: 0; list-style: disc;}
+        .server-info-table td:nth-child(3) {}
+        .server-info-table span {color: green; font-weight: bold;}
+        .server-info-table strong {color: red; font-weight: bold;}
+        h4 {font-weight: bold; margin: 2em 0 0.3em 0;}
+        #authorsAutoApprovedResults {list-style: none; margin: 0 0 0 100px !important; margin-top: -14px; border:solid 1px #ccc; padding:5px !important; width:190px; display: none;}
+        #authorsAutoApprovedResults li {list-style: none !important; margin: 0; padding: 0;}
+        #authorsAutoApprovedSearch {width: 200px;}
+        .cma-frontend-link {font-size: 120%;}
+        .cma-warning {border: 1px solid #dddddd; border-left: 4px solid #ff9900; padding: 1em; font-size: 90%; margin: 1em 0;}
+
+    </style>
+    <script type="text/javascript">
+        jQuery(document).ready(function () {
+            jQuery('#tabs').tabs();
+            jQuery('#tabs ul[role=tablist] a').click(function () {
+                location.hash = this.href.substr(this.href.lastIndexOf('#') + 1, this.href.length).replace(/_/g, '-');
+                this.blur();
+            });
+            jQuery('#tabs ul[role=tablist] a[href="' + location.hash.replace(/\-/g, '_') + '"]').click();
+        });
+    </script>
+</div>
+
+<?php include 'sharebox.phtml'; ?>
+
+<div class="clear"></div>
